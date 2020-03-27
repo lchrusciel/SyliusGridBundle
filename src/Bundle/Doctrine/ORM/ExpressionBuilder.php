@@ -15,7 +15,6 @@ namespace Sylius\Bundle\GridBundle\Doctrine\ORM;
 
 use Doctrine\ORM\Query\Expr\Comparison;
 use Doctrine\ORM\QueryBuilder;
-use Sylius\Component\Grid\Data\ExpressionBuilderInterface;
 
 final class ExpressionBuilder implements ExpressionBuilderInterface
 {
@@ -136,6 +135,15 @@ final class ExpressionBuilder implements ExpressionBuilderInterface
         $field = $this->adjustField($field);
 
         return $this->queryBuilder->expr()->notLike($this->resolveFieldByAddingJoins($field), $this->queryBuilder->expr()->literal($pattern));
+    }
+
+    public function isMemberOf(string $field, $value)
+    {
+        $field = $this->adjustField($field);
+        $parameterName = $this->getParameterName($field);
+        $this->queryBuilder->setParameter($parameterName, $value);
+
+        return $this->queryBuilder->expr()->isMemberOf(':' . $parameterName, $this->resolveFieldByAddingJoins($field));
     }
 
     public function orderBy(string $field, string $direction)

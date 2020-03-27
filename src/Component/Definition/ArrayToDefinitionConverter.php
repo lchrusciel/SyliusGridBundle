@@ -23,9 +23,13 @@ final class ArrayToDefinitionConverter implements ArrayToDefinitionConverterInte
     /** @var EventDispatcherInterface */
     private $eventDispatcher;
 
-    public function __construct(EventDispatcherInterface $eventDispatcher)
+    /** @var string */
+    private $gridFQCN;
+
+    public function __construct(EventDispatcherInterface $eventDispatcher, ?string $gridFQCN = null)
     {
         $this->eventDispatcher = $eventDispatcher;
+        $this->gridFQCN = $gridFQCN ?? Grid::class;
     }
 
     /**
@@ -33,7 +37,7 @@ final class ArrayToDefinitionConverter implements ArrayToDefinitionConverterInte
      */
     public function convert(string $code, array $configuration): Grid
     {
-        $grid = Grid::fromCodeAndDriverConfiguration(
+        $grid = $this->gridFQCN::fromCodeAndDriverConfiguration(
             $code,
             $configuration['driver']['name'],
             $configuration['driver']['options']

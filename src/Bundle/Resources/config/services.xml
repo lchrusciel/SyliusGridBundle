@@ -18,6 +18,9 @@
         <import resource="services/templating.xml" />
         <import resource="services/twig.xml" />
     </imports>
+    <parameters>
+        <parameter key="sylius.grid.class">Sylius\Component\Grid\Definition\Grid</parameter>
+    </parameters>
 
     <services>
         <defaults public="true" />
@@ -27,6 +30,7 @@
         </service>
         <service id="sylius.grid.array_to_definition_converter" class="Sylius\Component\Grid\Definition\ArrayToDefinitionConverter">
             <argument type="service" id="event_dispatcher" />
+            <argument>%sylius.grid.class%</argument>
         </service>
         <service id="sylius.grid.provider" class="Sylius\Component\Grid\Provider\ArrayGridProvider">
             <argument type="service" id="sylius.grid.array_to_definition_converter" />
